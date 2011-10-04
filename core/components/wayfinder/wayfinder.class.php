@@ -577,7 +577,12 @@ class Wayfinder {
             }
 
             $c->where(array('modResource.id:IN' =>  $ids));
-            $c->where(array('modResource.published:=' => 1));
+            
+            /* show unpublished when logged into manager */
+            if(!$this->modx->user->isAuthenticated('mgr')){
+	    	$c->where(array('modResource.published:=' => 1));
+	    }
+	    
             $c->where(array('modResource.deleted:=' => 0));
 
             /* not sure why this groupby is here in the first place. removing for now as it causes
