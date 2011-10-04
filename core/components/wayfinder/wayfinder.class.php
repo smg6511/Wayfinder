@@ -68,6 +68,8 @@ class Wayfinder {
         if (isset($config['startId'])) { $this->_config['id'] = $config['startId']; }
         if (isset($config['removeNewLines'])) { $this->_config['nl'] = ''; }
         
+        $this->_config['revealUnpub'] = empty($config['revealUnpub']) || strtolower($config['revealUnpub'])=='false' ? false : true ;
+        
         if (isset($this->_config['contexts'])) {
             $this->_config['contexts'] = preg_replace('/,  +/', ',', $this->_config['contexts']);
         }
@@ -579,7 +581,7 @@ class Wayfinder {
             $c->where(array('modResource.id:IN' =>  $ids));
             
             /* show unpublished when logged into manager */
-            if(!$this->modx->user->isAuthenticated('mgr')){
+            if(!$this->modx->user->isAuthenticated('mgr') || !$this->_config['revealUnpub']){
 	    	$c->where(array('modResource.published:=' => 1));
 	    }
 	    
